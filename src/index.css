@@ -133,4 +133,10 @@
     font-family: var(--font-pixel);
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
   }
+
+}
+
+.btn-ghost-blue:hover {
+    background-color: hsl(220 80% 55%);
+    color: hsl(0 0% 100%);
 }
