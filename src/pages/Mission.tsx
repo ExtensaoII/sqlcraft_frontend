@@ -5,55 +5,73 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Chest } from "@/components/chest/Chest";
 
+const normalize = (str) =>
+  str.trim().replace(/\s+/g, " ").toLowerCase();
+
+// Expressão usada para determinar se o baú deve abrir
+const chestPattern = /^select\s+.+\s+from\s+baú/i;
+
+// Comando correto para passar de fase
+const expectedCommand = "SELECT * FROM baú WHERE tipo = 'madeira'";
+
 const Mission = () => {
   const navigate = useNavigate();
+
   const [sqlCommand, setSqlCommand] = useState("");
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isChestOpen, setIsChestOpen] = useState(false);
 
-  const expectedCommand = "SELECT * FROM baú WHERE tipo = 'madeira'";
+  // Regra: o baú abre enquanto o texto contém "select … from baú"
+  const updateChestState = (text) => {
+    const cmd = normalize(text);
+    setIsChestOpen(chestPattern.test(cmd));
+  };
 
-  const normalize = (str) =>
-    str.trim().replace(/\s+/g, " ").toLowerCase();
-
+  // Regra: passar de fase só quando o comando exato for enviado
   const handleRunCommand = () => {
-    if (normalize(sqlCommand) === normalize(expectedCommand)) {
-      setIsCorrect(true);
-    } else {
-      setIsCorrect(false);
-    }
+    const cmd = normalize(sqlCommand);
+    const expected = normalize(expectedCommand);
+    setIsCorrect(cmd === expected);
+  };
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSqlCommand(value);
+    updateChestState(value);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-primary/5 to-background">
       <div className="container mx-auto px-4 py-8 relative z-10">
-        <div className="mb-8">
-          <Button
-            variant="ghost"
-            className="font-pixel text-xs mb-4 hover:translate-x-[-4px] transition-transform"
-            onClick={() => navigate("/missions")}
-          >
-            <ArrowLeft className="mr-2" size={20} />
-            Voltar às Missões
-          </Button>
 
-          <div className="text-center mb-8">
-            <h1 className="font-pixel text-2xl md:text-3xl mb-4 leading-relaxed pixel-text">
-              Fase 1: Coletar Madeira
-            </h1>
-            <p className="text-lg text-muted-foreground">
-              Aprenda a usar SELECT para buscar recursos básicos
-            </p>
-          </div>
+        <Button
+          variant="ghost"
+          className="font-pixel text-xs mb-4 hover:translate-x-[-4px] transition-transform"
+          onClick={() => navigate("/missions")}
+        >
+          <ArrowLeft className="mr-2" size={20} />
+          Voltar às Missões
+        </Button>
+
+        <div className="text-center mb-8">
+          <h1 className="font-pixel text-2xl md:text-3xl mb-4 leading-relaxed pixel-text">
+            Fase 1: Coletar Madeira
+          </h1>
+          <p className="text-lg text-muted-foreground">
+            Aprenda a usar SELECT para buscar recursos básicos
+          </p>
         </div>
 
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+
+          {/* Terminal SQL */}
           <div className="space-y-4">
             <div className="pixel-corners bg-card p-6 block-shadow">
               <h2 className="font-pixel text-sm mb-4 text-foreground">Terminal SQL</h2>
 
               <Textarea
                 value={sqlCommand}
-                onChange={(e) => setSqlCommand(e.target.value)}
+                onChange={handleChange}
                 placeholder="Digite seu comando SQL aqui..."
                 className="font-mono min-h-[200px] bg-background/50 pixel-corners"
               />
@@ -64,25 +82,27 @@ const Mission = () => {
               >
                 Executar Comando
               </Button>
+            </div>
 
-              </div>
-
-              <div className="h-6 flex items-center justify-center">
-                  {isCorrect && (
-                      <p className="font-pixel text-xs text-center">
-                      Comando correto!
-                      </p>
-                  )}
-              </div>          
-    </div>
-
-          <div className="flex items-center justify-center">
-            <div className="text-center">
-              <h2 className="font-pixel text-sm mb-4 text-foreground">Baú de Recursos</h2>
-
-              <Chest />
+            <div className="h-6 flex items-center justify-center">
+              {isCorrect && (
+                <p className="font-pixel text-xs text-center">
+                  Comando correto!
+                </p>
+              )}
             </div>
           </div>
+
+          {/* Baú */}
+          <div className="flex items-center justify-center">
+            <div className="text-center">
+              <h2 className="font-pixel text-sm mb-4 text-foreground">
+                Baú de Recursos
+              </h2>
+              <Chest isOpen={isChestOpen} />
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
