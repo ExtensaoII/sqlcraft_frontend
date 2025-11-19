@@ -4,14 +4,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Chest } from "@/components/chest/Chest";
+import { MinecraftInventoryTable } from "@/components/inventory/InventoryTable";
+
+const inventoryItems = [
+  { name: "Madeira de carvalho", type: "madeira", quantity: 10 },
+  { name: "Graveto", type: "Recurso", quantity: 4 },
+];
 
 const normalize = (str) =>
   str.trim().replace(/\s+/g, " ").toLowerCase();
 
-// Expressão usada para determinar se o baú deve abrir
 const chestPattern = /^select\s+.+\s+from\s+baú/i;
 
-// Comando correto para passar de fase
 const expectedCommand = "SELECT * FROM baú WHERE tipo = 'madeira'";
 
 const Mission = () => {
@@ -21,13 +25,11 @@ const Mission = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [isChestOpen, setIsChestOpen] = useState(false);
 
-  // Regra: o baú abre enquanto o texto contém "select … from baú"
   const updateChestState = (text) => {
     const cmd = normalize(text);
     setIsChestOpen(chestPattern.test(cmd));
   };
 
-  // Regra: passar de fase só quando o comando exato for enviado
   const handleRunCommand = () => {
     const cmd = normalize(sqlCommand);
     const expected = normalize(expectedCommand);
@@ -94,14 +96,24 @@ const Mission = () => {
           </div>
 
           {/* Baú */}
-          <div className="flex items-center justify-center">
-            <div className="text-center">
-              <h2 className="font-pixel text-sm mb-4 text-foreground">
-                Baú de Recursos
-              </h2>
-              <Chest isOpen={isChestOpen} />
-            </div>
+        <div className="flex items-center justify-center">
+          <div className="relative text-center">
+
+            <h2 className="font-pixel text-sm mb-4 text-foreground">
+              Baú de Recursos
+            </h2>
+
+            {/* Baú */}
+            <Chest isOpen={isChestOpen} />
+
+            {isChestOpen && (
+              <div className="absolute inset-0 flex items-center justify-center z-20">
+                <MinecraftInventoryTable items={inventoryItems} />
+              </div>
+            )}
+
           </div>
+        </div>
 
         </div>
       </div>
