@@ -1,24 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Chest.css";
 
-export const Chest = () => {
-  const [state, setState] = useState("closed"); // "closed" | "opening" | "opened| "closing"
-  const handleClick = () => {
-    if (state === "opening" || state === "closing") return;
+export const Chest = ({ isOpen }) => {
+  const [state, setState] = useState("closed");
 
-    if (state === "closed") {
+  useEffect(() => {
+    if (isOpen && state === "closed") {
       setState("opening");
-      setTimeout(() => {
-        setState("opened")
-      }, 900);
-    } else if (state === "opened") {
-      setState("closing")
-      setTimeout(() => {
-        setState("closed")
-      }, 900);
+      setTimeout(() => setState("opened"), 900);
     }
-  }
+    if (!isOpen && state === "opened") {
+      setState("closing");
+      setTimeout(() => setState("closed"), 900);
+    }
+  }, [isOpen]);
 
-  return <div className={`chest ${state}`} onClick={handleClick} 
-  />;
+  return <div className={`chest ${state}`} />;
 };
