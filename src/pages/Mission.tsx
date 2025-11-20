@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Chest } from "@/components/chest/Chest";
 import { MinecraftInventoryTable } from "@/components/inventory/InventoryTable";
 
@@ -20,6 +20,11 @@ const expectedCommand = "SELECT * FROM baú WHERE tipo = 'madeira'";
 
 const Mission = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const currentId = Number(id);
+  const prevId = currentId > 1 ? currentId - 1 : null;
+  const nextId = currentId + 1; // pode ajustar se quiser limitar
 
   const [sqlCommand, setSqlCommand] = useState("");
   const [isCorrect, setIsCorrect] = useState(false);
@@ -44,25 +49,31 @@ const Mission = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-primary/5 to-background">
-      <div className="container mx-auto px-4 py-8 relative z-10">
 
+    <div className="px-2 pt-4">
         <Button
           variant="ghost"
-          className="font-pixel text-xs mb-4 hover:translate-x-[-4px] transition-transform"
+          className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
           onClick={() => navigate("/missions")}
         >
           <ArrowLeft className="mr-2" size={20} />
           Voltar às Missões
         </Button>
+      </div>
+
+      <div className="container mx-auto px-4 py-8 relative z-10">
+
+        {/* Voltar para lista de missões */}
 
         <div className="text-center mb-8">
           <h1 className="font-pixel text-2xl md:text-3xl mb-4 leading-relaxed pixel-text">
-            Fase 1: Coletar Madeira
+            Fase {currentId}: Coletar Madeira
           </h1>
           <p className="text-lg text-muted-foreground">
             Aprenda a usar SELECT para buscar recursos básicos
           </p>
         </div>
+
 
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
 
@@ -96,27 +107,53 @@ const Mission = () => {
           </div>
 
           {/* Baú */}
-        <div className="flex items-center justify-center">
-          <div className="relative text-center">
+          <div className="flex items-center justify-center">
+            <div className="relative text-center">
 
-            <h2 className="font-pixel text-sm mb-4 text-foreground">
-              Baú de Recursos
-            </h2>
+              <h2 className="font-pixel text-sm mb-4 text-foreground">
+                Baú de Recursos
+              </h2>
 
-            {/* Baú */}
-            <Chest isOpen={isChestOpen} />
+              <Chest isOpen={isChestOpen} />
 
-            {isChestOpen && (
-              <div className="absolute inset-0 flex items-center justify-center z-20">
-                <MinecraftInventoryTable items={inventoryItems} />
-              </div>
-            )}
+              {isChestOpen && (
+                <div className="absolute inset-0 flex items-center justify-center z-20">
+                  <MinecraftInventoryTable items={inventoryItems} />
+                </div>
+              )}
 
+            </div>
           </div>
-        </div>
 
         </div>
+
+
       </div>
+
+        {/* Setas de navegação entre fases */}
+        <div className="flex justify-between w-full px-4  mt-16">
+          {prevId && (
+            <Button
+              variant="ghost"
+              className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
+              onClick={() => navigate(`/mission/${prevId}`)}
+            >
+              <ArrowLeft className="mr-2" size={20} />
+              Fase anterior
+            </Button>
+          )}
+
+          <div></div>
+
+          <Button
+            variant="ghost"
+            className="font-pixel text-xs hover:translate-x-[4px] transition-transform btn-ghost-blue"
+            onClick={() => navigate(`/mission/${nextId}`)}
+          >
+            Próxima fase
+            <ArrowRight className="ml-2" size={20} />
+          </Button>
+        </div>
     </div>
   );
 };
