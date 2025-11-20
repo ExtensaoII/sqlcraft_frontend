@@ -38,32 +38,35 @@ const Missions = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-primary/5 to-background">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgb3BhY2l0eT0iMC4wNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30"></div>
-      
+    <div className="min-h-screen bg-gradient-to-b from-background via-primary/5 to-background relative">
+
+      {/* Botão fora do container → encostado na borda */}
+      <div className="px-2 pt-4 relative z-20">
+        <Button
+          variant="ghost"
+          className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
+          onClick={() => navigate('/')}
+        >
+          <ArrowLeft className="mr-2" size={20} />
+          Voltar ao Menu
+        </Button>
+      </div>
+
+      {/* Background */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgb3BhY2l0eT0iMC4wNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30 z-0"></div>
+
+      {/* Container principal */}
       <div className="container mx-auto px-4 py-8 relative z-10">
-        {/* Header */}
-        <div className="mb-8">
-          <Button
-            variant="ghost"
-            className="font-pixel text-xs mb-4 hover:translate-x-[-4px] transition-transform btn-ghost-blue"
-            onClick={() => navigate('/')}
-          >
-            <ArrowLeft className="mr-2" size={20} />
-            Voltar ao Menu
-          </Button>
-          
-          <div className="text-center">
-            <h1 className="font-pixel text-2xl md:text-3xl mb-4 leading-relaxed pixel-text">
-              Roadmap de Missões
-            </h1>
-            <p className="text-xl text-muted-foreground">
-              Progrida no jogo resolvendo queries SQL
-            </p>
-          </div>
+
+        <div className="mb-8 text-center">
+          <h1 className="font-pixel text-2xl md:text-3xl mb-4 leading-relaxed pixel-text">
+            Roadmap de Missões
+          </h1>
+          <p className="text-xl text-muted-foreground">
+            Progrida no jogo resolvendo queries SQL
+          </p>
         </div>
 
-        {/* Missions List */}
         <div className="max-w-4xl mx-auto space-y-6">
           {missions.map((mission, index) => (
             <div key={index} className="relative">
