@@ -3,31 +3,41 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import { Chest } from "@/components/chest/Chest";
 import { MinecraftInventoryTable } from "@/components/inventory/InventoryTable";
 
-const inventoryItems = [
-  { name: "Madeira de carvalho", type: "madeira", quantity: 10 },
-  { name: "Graveto", type: "Recurso", quantity: 4 },
-];
+import { missions } from "@/data/missions"; // <- your missions array
 
 const normalize = (str: string) =>
   str.trim().replace(/\s+/g, " ").toLowerCase();
-
-const chestPattern = /^select\s+.+\s+from\s+baú/i;
-const expectedCommand = "SELECT * FROM baú WHERE tipo = 'madeira'";
 
 const Mission = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
   const currentId = Number(id);
+
+  const mission = missions.find((m) => m.id === currentId);
+  const maxMissionId = missions.length;
+
   const prevId = currentId > 1 ? currentId - 1 : null;
-  const nextId = currentId + 1;
+  const nextId = currentId < maxMissionId ? currentId + 1 : null;
 
   const [sqlCommand, setSqlCommand] = useState("");
   const [isCorrect, setIsCorrect] = useState(false);
   const [isChestOpen, setIsChestOpen] = useState(false);
+
+  // Mission not found → show error screen
+  if (!mission) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="font-pixel text-xl">Essa missão não existe.</p>
+      </div>
+    );
+  }
+
+  const chestPattern = mission.chestPattern ?? /.*/;
 
   const updateChestState = (text: string) => {
     const cmd = normalize(text);
@@ -36,7 +46,7 @@ const Mission = () => {
 
   const handleRunCommand = () => {
     const cmd = normalize(sqlCommand);
-    const expected = normalize(expectedCommand);
+    const expected = normalize(mission.expectedCommand);
     setIsCorrect(cmd === expected);
   };
 
@@ -49,7 +59,6 @@ const Mission = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-primary/5 to-background">
 
-      {/* Botão de voltar — agora colado na borda */}
       <div className="px-2 pt-4">
         <Button
           variant="ghost"
@@ -66,14 +75,14 @@ const Mission = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="font-pixel text-2xl md:text-3xl mb-4 leading-relaxed pixel-text">
-            Fase {currentId}: Coletar Madeira
+            Fase {mission.id}: {mission.title}
           </h1>
           <p className="text-lg text-muted-foreground">
-            Aprenda a usar SELECT para buscar recursos básicos
+            {mission.description}
           </p>
         </div>
 
-        {/* Grade expandida */}
+        {/* Grid */}
         <div className="w-full grid md:grid-cols-2 gap-8 flex-1 max-h-[58vh]">
 
           {/* Terminal */}
@@ -107,7 +116,7 @@ const Mission = () => {
             </div>
           </div>
 
-          {/* Baú */}
+          {/* Chest */}
           <div className="flex items-stretch justify-center">
             <div className="relative text-center flex flex-col h-full w-full">
 
@@ -116,12 +125,12 @@ const Mission = () => {
               </h2>
 
               <div className="flex-1 flex items-center justify-center">
-                <Chest isOpen={isChestOpen} />
+                <Chest isOpen={isChestOpen} image={mission.image} />
               </div>
 
               {isChestOpen && (
                 <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                  <MinecraftInventoryTable items={inventoryItems} />
+                  <MinecraftInventoryTable items={mission.chestItems} />
                 </div>
               )}
 
@@ -132,8 +141,9 @@ const Mission = () => {
 
       </div>
 
-      {/* Navegação */}
-        <div className="flex justify-between w-full px-4 mb-4">
+      {/* Navigation */}
+      <div className="flex justify-between w-full px-4 mb-4">
+
         {prevId && (
           <Button
             variant="ghost"
@@ -147,14 +157,17 @@ const Mission = () => {
 
         <div></div>
 
-        <Button
-          variant="ghost"
-          className="font-pixel text-xs hover:translate-x-[4px] transition-transform btn-ghost-blue"
-          onClick={() => navigate(`/mission/${nextId}`)}
-        >
-          Próxima fase
-          <ArrowRight className="ml-2" size={20} />
-        </Button>
+        {nextId && (
+          <Button
+            variant="ghost"
+            className="font-pixel text-xs hover:translate-x-[4px] transition-transform btn-ghost-blue"
+            onClick={() => navigate(`/mission/${nextId}`)}
+          >
+            Próxima fase
+            <ArrowRight className="ml-2" size={20} />
+          </Button>
+        )}
+
       </div>
 
     </div>
