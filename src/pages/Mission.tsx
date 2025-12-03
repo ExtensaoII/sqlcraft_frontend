@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Chest } from "@/components/chest/Chest";
 import { MinecraftInventoryTable } from "@/components/inventory/InventoryTable";
 
-import { missions } from "@/data/missions"; // <- your missions array
+import { missions } from "@/data/missions";
 
 const normalize = (str: string) =>
   str.trim().replace(/\s+/g, " ").toLowerCase();
@@ -28,7 +28,6 @@ const Mission = () => {
   const [isCorrect, setIsCorrect] = useState(false);
   const [isChestOpen, setIsChestOpen] = useState(false);
 
-  // Mission not found → show error screen
   if (!mission) {
     return (
       <div className="min-h-screen flex items-center justify-center">
