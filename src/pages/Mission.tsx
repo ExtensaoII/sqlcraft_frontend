@@ -17,7 +17,6 @@ const Mission = () => {
   const { id } = useParams();
 
   const currentId = Number(id);
-
   const mission = missions.find((m) => m.id === currentId);
   const maxMissionId = missions.length;
 
@@ -26,7 +25,6 @@ const Mission = () => {
 
   const [sqlCommand, setSqlCommand] = useState("");
   const [isCorrect, setIsCorrect] = useState(false);
-  const [isChestOpen, setIsChestOpen] = useState(false);
 
   if (!mission) {
     return (
@@ -38,11 +36,6 @@ const Mission = () => {
 
   const chestPattern = mission.chestPattern ?? /.*/;
 
-  const updateChestState = (text: string) => {
-    const cmd = normalize(text);
-    setIsChestOpen(chestPattern.test(cmd));
-  };
-
   const handleRunCommand = () => {
     const cmd = normalize(sqlCommand);
     const expected = normalize(mission.expectedCommand);
@@ -50,14 +43,13 @@ const Mission = () => {
   };
 
   const handleChange = (e: any) => {
-    const value = e.target.value;
-    setSqlCommand(value);
-    updateChestState(value);
+    setSqlCommand(e.target.value);
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-primary/5 to-background">
 
+      {/* Back button */}
       <div className="px-2 pt-4">
         <Button
           variant="ghost"
@@ -124,14 +116,12 @@ const Mission = () => {
               </h2>
 
               <div className="flex-1 flex items-center justify-center">
-                <Chest isOpen={isChestOpen} image={mission.image} />
+                <Chest
+                  command={sqlCommand}
+                  openPattern={chestPattern}
+                  items={<MinecraftInventoryTable items={mission.chestItems} />}
+                />
               </div>
-
-              {isChestOpen && (
-                <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                  <MinecraftInventoryTable items={mission.chestItems} />
-                </div>
-              )}
 
             </div>
           </div>
