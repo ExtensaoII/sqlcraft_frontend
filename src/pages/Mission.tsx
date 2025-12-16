@@ -146,6 +146,7 @@ const Mission = () => {
 
               <div className="flex-1 flex items-center justify-center">
                 <Chest
+                  key={mission.id}
                   command={sqlCommand}
                   openPattern={chestPattern}
                   items={<MinecraftInventoryTable items={mission.chestItems} />}

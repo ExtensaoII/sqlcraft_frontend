@@ -6,20 +6,34 @@ export const Chest = ({ command, openPattern, items }) => {
 
   const shouldOpen = openPattern ? openPattern.test(command) : false;
 
+  // 1️⃣ RESET DURO quando o comando muda
   useEffect(() => {
+    if (!command) {
+      setState("closed");
+    }
+  }, [command]);
+
+  // 2️⃣ CONTROLE DE ABERTURA / FECHAMENTO
+  useEffect(() => {
+    let timeout;
+
     if (shouldOpen && state === "closed") {
       setState("opening");
-      setTimeout(() => setState("opened"), 900);
+      timeout = setTimeout(() => setState("opened"), 900);
     }
+
     if (!shouldOpen && state === "opened") {
       setState("closing");
-      setTimeout(() => setState("closed"), 900);
+      timeout = setTimeout(() => setState("closed"), 900);
     }
-  }, [shouldOpen]);
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [shouldOpen, state]);
 
   return (
     <div className="relative flex flex-col items-center">
-
       <div className={`chest ${state}`} />
 
       {(state === "opening" || state === "opened") && items && (
@@ -27,7 +41,6 @@ export const Chest = ({ command, openPattern, items }) => {
           {items}
         </div>
       )}
-
     </div>
   );
 };
