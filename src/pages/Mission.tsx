@@ -25,10 +25,12 @@ const Mission = () => {
 
   const [sqlCommand, setSqlCommand] = useState("");
   const [isCorrect, setIsCorrect] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     setSqlCommand("");
     setIsCorrect(false);
+    setErrorMessage(null);
   }, [id]);
 
   if (!mission) {
@@ -44,7 +46,23 @@ const Mission = () => {
   const handleRunCommand = () => {
     const cmd = normalize(sqlCommand);
     const expected = normalize(mission.expectedCommand);
-    setIsCorrect(cmd === expected);
+
+    setErrorMessage(null);
+
+    if (cmd === expected) {
+      setIsCorrect(true);
+      return;
+    }
+
+    setIsCorrect(false);
+
+    const hint = mission.validationHints?.find((h) => h.test(cmd));
+
+    if (hint) {
+      setErrorMessage(hint.message);
+    } else {
+      setErrorMessage("O comando está incorreto. Revise a estrutura do SQL.");
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -66,11 +84,11 @@ const Mission = () => {
         </Button>
       </div>
 
-      <div className="container mx-auto px-4 py-8 relative z-10 flex-1 flex flex-col">
+      <div className="container mx-auto px-4 py-8 flex-1 flex flex-col">
 
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="font-pixel text-2xl md:text-3xl mb-4 leading-relaxed pixel-text">
+          <h1 className="font-pixel text-2xl md:text-3xl mb-4">
             Fase {mission.id}: {mission.title}
           </h1>
           <p className="text-lg text-muted-foreground">
@@ -84,7 +102,7 @@ const Mission = () => {
           {/* Terminal */}
           <div className="flex flex-col space-y-4 h-full">
             <div className="pixel-corners bg-card p-6 block-shadow flex flex-col flex-1">
-              <h2 className="font-pixel text-sm mb-4 text-foreground">
+              <h2 className="font-pixel text-sm mb-4">
                 Terminal SQL
               </h2>
 
@@ -92,21 +110,28 @@ const Mission = () => {
                 value={sqlCommand}
                 onChange={handleChange}
                 placeholder="Digite seu comando SQL aqui..."
-                className="font-mono !text-xl bg-background/50 pixel-corners flex-1 min-h-[300px]"
+                className="font-mono !text-xl flex-1 min-h-[300px]"
               />
 
               <Button
                 onClick={handleRunCommand}
-                className="w-full mt-4 font-pixel text-xs pixel-corners block-shadow hover:translate-y-[-2px] transition-transform"
+                className="w-full mt-4 font-pixel text-xs"
               >
                 Executar Comando
               </Button>
             </div>
 
-            <div className="h-6 flex items-center justify-center">
+            {/* Feedback */}
+            <div className="h-6 flex items-center justify-center text-center">
               {isCorrect && (
-                <p className="font-pixel text-xs text-center">
+                <p className="font-pixel text-xs">
                   Comando correto!
+                </p>
+              )}
+
+              {!isCorrect && errorMessage && (
+                <p className="font-pixel text-xs text-red-500">
+                  {errorMessage}
                 </p>
               )}
             </div>
@@ -114,9 +139,8 @@ const Mission = () => {
 
           {/* Chest */}
           <div className="flex items-stretch justify-center">
-            <div className="relative text-center flex flex-col h-full w-full">
-
-              <h2 className="font-pixel text-sm mb-4 text-foreground">
+            <div className="flex flex-col h-full w-full text-center">
+              <h2 className="font-pixel text-sm mb-4">
                 Baú de Recursos
               </h2>
 
@@ -127,21 +151,18 @@ const Mission = () => {
                   items={<MinecraftInventoryTable items={mission.chestItems} />}
                 />
               </div>
-
             </div>
           </div>
 
         </div>
-
       </div>
 
       {/* Navigation */}
       <div className="flex justify-between w-full px-4 mb-4">
-
         {prevId && (
           <Button
             variant="ghost"
-            className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
+            className="font-pixel text-xs"
             onClick={() => navigate(`/mission/${prevId}`)}
           >
             <ArrowLeft className="mr-2" size={20} />
@@ -149,19 +170,18 @@ const Mission = () => {
           </Button>
         )}
 
-        <div></div>
+        <div />
 
         {nextId && (
           <Button
             variant="ghost"
-            className="font-pixel text-xs hover:translate-x-[4px] transition-transform btn-ghost-blue"
+            className="font-pixel text-xs"
             onClick={() => navigate(`/mission/${nextId}`)}
           >
             Próxima fase
             <ArrowRight className="ml-2" size={20} />
           </Button>
         )}
-
       </div>
 
     </div>
