@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -26,6 +26,11 @@ const Mission = () => {
   const [sqlCommand, setSqlCommand] = useState("");
   const [isCorrect, setIsCorrect] = useState(false);
 
+  useEffect(() => {
+    setSqlCommand("");
+    setIsCorrect(false);
+  }, [id]);
+
   if (!mission) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -42,7 +47,7 @@ const Mission = () => {
     setIsCorrect(cmd === expected);
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setSqlCommand(e.target.value);
   };
 
