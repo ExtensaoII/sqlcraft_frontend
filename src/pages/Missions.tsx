@@ -2,40 +2,11 @@ import { Button } from "@/components/ui/button";
 import { MissionCard } from "@/components/MissionCard";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { missions } from "@/data/missions";
 
 const Missions = () => {
   const navigate = useNavigate();
   
-  const missions = [
-    {
-      title: "Coletar Madeira",
-      description: "Aprenda a usar SELECT para buscar recursos básicos",
-      sqlConcept: "SELECT",
-      icon: "database" as const,
-      completed: false,
-    },
-    {
-      title: "Construir Ferramentas",
-      description: "Use WHERE e filtros para craftar itens específicos",
-      sqlConcept: "WHERE",
-      icon: "pickaxe" as const,
-      completed: false,
-    },
-    {
-      title: "Minerar Recursos",
-      description: "Domine JOIN para combinar diferentes tabelas de materiais",
-      sqlConcept: "JOIN",
-      icon: "pickaxe" as const,
-      completed: false,
-    },
-    {
-      title: "Derrotar o Ender Dragon",
-      description: "Queries avançadas com agregações e subqueries",
-      sqlConcept: "GROUP BY",
-      icon: "trophy" as const,
-      completed: false,
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-primary/5 to-background relative">
@@ -75,8 +46,7 @@ const Missions = () => {
               )}
               <MissionCard 
                 {...mission} 
-                onClick={index === 0 ? () => navigate('/mission/1') : undefined}
-              />
+                onClick={() => navigate(`/mission/${mission.id}`)} />
             </div>
           ))}
         </div>

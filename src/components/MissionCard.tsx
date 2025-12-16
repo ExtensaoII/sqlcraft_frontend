@@ -3,7 +3,7 @@ import { Database, Pickaxe, Sword, Trophy } from "lucide-react";
 
 interface MissionCardProps {
   title: string;
-  description: string;
+  briefDescription: string;
   sqlConcept: string;
   icon: "database" | "pickaxe" | "sword" | "trophy";
   completed?: boolean;
@@ -19,7 +19,7 @@ const iconMap = {
 
 export const MissionCard = ({
   title,
-  description,
+  briefDescription,
   sqlConcept,
   icon,
   completed = false,
@@ -40,7 +40,7 @@ export const MissionCard = ({
         </div>
         <div className="flex-1">
           <h3 className="font-pixel text-sm mb-2 leading-relaxed">{title}</h3>
-          <p className="text-muted-foreground text-lg mb-3">{description}</p>
+          <p className="text-muted-foreground text-lg mb-3">{briefDescription}</p>
           <div className="inline-block bg-accent/20 border-2 border-accent px-3 py-1 rounded">
             <span className="font-pixel text-xs text-accent-foreground">
               SQL: {sqlConcept}
