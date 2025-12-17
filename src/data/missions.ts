@@ -1,6 +1,11 @@
 import { ChestScene } from "@/components/scenes/ChestScene";
 import { FurnaceScene } from "@/components/scenes/FurnaceScene"
 import { CraftingTableScene } from "@/components/scenes/CraftingTableScene";
+import { DiamondOreScene } from "@/components/scenes/DiamondOreScene";
+import { ObsidianScene } from "@/components/scenes/ObsidianScene"
+import { BlazeScene } from "@/components/scenes/BlazeScene"
+import { EndermanScene } from "@/components/scenes/EndermanScene"
+import { EnderDragonScene } from "@/components/scenes/EnderDragonScene"
 
 import type { MissionData } from "./types";
 
@@ -165,10 +170,7 @@ export const missions: MissionData[] = [
   sqlConcept: "SELECT",
   icon: "database",
 
-  scene: ChestScene(
-    [],
-    /^select\s+.+\s+from\s+caverna/i
-  ),
+  scene: DiamondOreScene,
 
   validationHints: [
     {
@@ -184,7 +186,7 @@ export const missions: MissionData[] = [
       message: "Você precisa localizar diamantes."
     }
   ]
-},
+  },
 {
   id: 7,
   title: "Coletar Obsidiana",
@@ -195,10 +197,7 @@ export const missions: MissionData[] = [
   sqlConcept: "INSERT",
   icon: "pickaxe",
 
-  scene: ChestScene(
-    [],
-    /^insert\s+into\s+inventário/i
-  ),
+  scene: ObsidianScene,
 
   validationHints: [
     {
@@ -221,10 +220,7 @@ export const missions: MissionData[] = [
   sqlConcept: "SELECT",
   icon: "database",
 
-  scene: ChestScene(
-    [{ name: "Vara de Blaze", type: "drop_inimigo", quantity: 5 }],
-    /^select\s+.+\s+from\s+fortaleza/i
-  ),
+  scene: BlazeScene,
 
   validationHints: [
     {
@@ -247,10 +243,7 @@ export const missions: MissionData[] = [
   sqlConcept: "SELECT",
   icon: "database",
 
-  scene: ChestScene(
-    [{ name: "Ender Pearl", type: "pearl", quantity: 4 }],
-    /^select\s+.+\s+from\s+inimigos/i
-  ),
+  scene: EndermanScene,
 
   validationHints: [
     {
@@ -273,10 +266,7 @@ export const missions: MissionData[] = [
   sqlConcept: "DELETE",
   icon: "sword",
 
-  scene: ChestScene(
-    [{ name: "Ovo do Dragão", type: "item_raro", quantity: 1 }],
-    /^delete\s+.+\s+from\s+criaturas/i
-  ),
+  scene: EnderDragonScene,
 
   validationHints: [
     {
