@@ -1,5 +1,6 @@
 import { ChestScene } from "@/components/scenes/ChestScene";
 import { FurnaceScene } from "@/components/scenes/FurnaceScene"
+import { CraftingTableScene } from "@/components/scenes/CraftingTableScene";
 
 import type { MissionData } from "./types";
 
@@ -137,10 +138,7 @@ export const missions: MissionData[] = [
     sqlConcept: "SELECT",
     icon: "database",
 
-    scene: ChestScene(
-      [{ name: "Barra de Ferro", type: "barra_de_ferro", quantity: 6 }],
-      /^select\s+.+\s+from\s+inventário/i
-    ),
+    scene: CraftingTableScene,
 
     validationHints: [
       {
