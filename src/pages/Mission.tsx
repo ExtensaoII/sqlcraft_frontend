@@ -51,7 +51,7 @@ const Mission = () => {
 
     setIsCorrect(false);
 
-    const hint = mission.validationHints.find((h) => h.test(cmd));
+    const hint = mission.validationHints?.find((h) => h.test(cmd));
 
     if (hint) {
       setErrorMessage(hint.message);
@@ -60,14 +60,18 @@ const Mission = () => {
     }
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setSqlCommand(e.target.value);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-primary/5 to-background">
 
-      {/* Back */}
+      {/* Back button */}
       <div className="px-2 pt-4">
         <Button
           variant="ghost"
-          className="font-pixel text-xs"
+          className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
           onClick={() => navigate("/missions")}
         >
           <ArrowLeft className="mr-2" size={20} />
@@ -99,7 +103,7 @@ const Mission = () => {
 
               <Textarea
                 value={sqlCommand}
-                onChange={(e) => setSqlCommand(e.target.value)}
+                onChange={handleChange}
                 placeholder="Digite seu comando SQL aqui..."
                 className="font-mono !text-xl flex-1 min-h-[300px]"
               />
@@ -135,7 +139,7 @@ const Mission = () => {
                 Cena
               </h2>
 
-              <div key={mission.id} className="flex-1 flex items-center justify-center">
+              <div className="flex-1 flex items-center justify-center">
                 {mission.scene.render({ command: sqlCommand })}
               </div>
             </div>
@@ -149,7 +153,7 @@ const Mission = () => {
         {prevId && (
           <Button
             variant="ghost"
-            className="font-pixel text-xs"
+            className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
             onClick={() => navigate(`/mission/${prevId}`)}
           >
             <ArrowLeft className="mr-2" size={20} />
@@ -162,7 +166,7 @@ const Mission = () => {
         {nextId && (
           <Button
             variant="ghost"
-            className="font-pixel text-xs"
+            className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
             onClick={() => navigate(`/mission/${nextId}`)}
           >
             Próxima fase
@@ -170,6 +174,7 @@ const Mission = () => {
           </Button>
         )}
       </div>
+
     </div>
   );
 };
