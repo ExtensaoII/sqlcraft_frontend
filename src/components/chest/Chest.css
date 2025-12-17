@@ -1,0 +1,39 @@
+.chest {
+  width: 300px;
+  height: 300px;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+/* STATIC STATES */
+.chest.opened {
+  background-image: url("/src/assets/chestSheet.png");
+  background-position: -2416px 0; /* last frame of opening */
+}
+
+.chest.closed {
+  background-image: url("/src/assets/chestSheet.png");
+  background-position: 0 0;
+}
+
+
+.chest.opening {
+  background-image: url("/src/assets/chestSheet.png");
+  animation: chestOpening 0.5s steps(8, end) forwards;
+}
+
+
+.chest.closing {
+  background-image: url("/src/assets/chestSheet.png");
+  animation: chestOpening 0.7s steps(8, end) reverse forwards;
+}
+
+@keyframes chestOpening {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -2416px 0; /* 302 * 7 */
+  }
+}
