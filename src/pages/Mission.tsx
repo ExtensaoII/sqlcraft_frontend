@@ -4,9 +4,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Chest } from "@/components/chest/Chest";
-import { MinecraftInventoryTable } from "@/components/inventory/InventoryTable";
-
 import { missions } from "@/data/missions";
 
 const normalize = (str: string) =>
@@ -41,8 +38,6 @@ const Mission = () => {
     );
   }
 
-  const chestPattern = mission.chestPattern ?? /.*/;
-
   const handleRunCommand = () => {
     const cmd = normalize(sqlCommand);
     const expected = normalize(mission.expectedCommand);
@@ -56,7 +51,7 @@ const Mission = () => {
 
     setIsCorrect(false);
 
-    const hint = mission.validationHints?.find((h) => h.test(cmd));
+    const hint = mission.validationHints.find((h) => h.test(cmd));
 
     if (hint) {
       setErrorMessage(hint.message);
@@ -65,18 +60,14 @@ const Mission = () => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setSqlCommand(e.target.value);
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-primary/5 to-background">
 
-      {/* Back button */}
+      {/* Back */}
       <div className="px-2 pt-4">
         <Button
           variant="ghost"
-          className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
+          className="font-pixel text-xs"
           onClick={() => navigate("/missions")}
         >
           <ArrowLeft className="mr-2" size={20} />
@@ -108,7 +99,7 @@ const Mission = () => {
 
               <Textarea
                 value={sqlCommand}
-                onChange={handleChange}
+                onChange={(e) => setSqlCommand(e.target.value)}
                 placeholder="Digite seu comando SQL aqui..."
                 className="font-mono !text-xl flex-1 min-h-[300px]"
               />
@@ -137,20 +128,15 @@ const Mission = () => {
             </div>
           </div>
 
-          {/* Chest */}
+          {/* Scene */}
           <div className="flex items-stretch justify-center">
             <div className="flex flex-col h-full w-full text-center">
               <h2 className="font-pixel text-sm mb-4">
-                Baú de Recursos
+                Cena
               </h2>
 
-              <div className="flex-1 flex items-center justify-center">
-                <Chest
-                  key={mission.id}
-                  command={sqlCommand}
-                  openPattern={chestPattern}
-                  items={<MinecraftInventoryTable items={mission.chestItems} />}
-                />
+              <div key={mission.id} className="flex-1 flex items-center justify-center">
+                {mission.scene.render({ command: sqlCommand })}
               </div>
             </div>
           </div>
@@ -184,7 +170,6 @@ const Mission = () => {
           </Button>
         )}
       </div>
-
     </div>
   );
 };

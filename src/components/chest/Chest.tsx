@@ -1,46 +1,43 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./Chest.css";
 
-export const Chest = ({ command, openPattern, items }) => {
-  const [state, setState] = useState("closed");
+type ChestState = "closed" | "opening" | "opened" | "closing";
 
-  const shouldOpen = openPattern ? openPattern.test(command) : false;
+interface ChestProps {
+  isOpen: boolean;
+  children?: React.ReactNode;
+}
 
-  // 1️⃣ RESET DURO quando o comando muda
+export function Chest({ isOpen, children }: ChestProps) {
+  const [state, setState] = useState<ChestState>("closed");
+
   useEffect(() => {
-    if (!command) {
-      setState("closed");
-    }
-  }, [command]);
+    let timeout: number | undefined;
 
-  // 2️⃣ CONTROLE DE ABERTURA / FECHAMENTO
-  useEffect(() => {
-    let timeout;
-
-    if (shouldOpen && state === "closed") {
+    if (isOpen && state === "closed") {
       setState("opening");
-      timeout = setTimeout(() => setState("opened"), 900);
+      timeout = window.setTimeout(() => setState("opened"), 900);
     }
 
-    if (!shouldOpen && state === "opened") {
+    if (!isOpen && state === "opened") {
       setState("closing");
-      timeout = setTimeout(() => setState("closed"), 900);
+      timeout = window.setTimeout(() => setState("closed"), 900);
     }
 
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [shouldOpen, state]);
+  }, [isOpen, state]);
 
   return (
     <div className="relative flex flex-col items-center">
       <div className={`chest ${state}`} />
 
-      {(state === "opening" || state === "opened") && items && (
+      {(state === "opening" || state === "opened") && children && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          {items}
+          {children}
         </div>
       )}
     </div>
   );
-};
+}
