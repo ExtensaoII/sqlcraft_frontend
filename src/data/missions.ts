@@ -1,4 +1,5 @@
-import { ChestScene } from "@/components/scenes/ChestScene";
+import { WoodScene } from "@/components/scenes/WoodScene"
+import { StoneScene } from "@/components/scenes/StoneScene"
 import { FurnaceScene } from "@/components/scenes/FurnaceScene"
 import { CraftingTableScene } from "@/components/scenes/CraftingTableScene";
 import { DiamondOreScene } from "@/components/scenes/DiamondOreScene";
@@ -20,13 +21,7 @@ export const missions: MissionData[] = [
     sqlConcept: "SELECT",
     icon: "database",
 
-    scene: ChestScene(
-      [
-        { name: "Madeira de carvalho", type: "madeira", quantity: 10 },
-        { name: "Graveto", type: "recurso", quantity: 4 }
-      ],
-      /^select\s+.+\s+from\s+baú/i
-    ),
+    scene: WoodScene,
 
     validationHints: [
       {
@@ -46,7 +41,7 @@ export const missions: MissionData[] = [
 
   {
     id: 2,
-    title: "Construa Ferramentas",
+    title: "Conserte Ferramentas",
     briefDescription: "Aprenda a usar INSERT para adicionar novos itens",
     description: "Use INSERT para criar ferramentas no inventário.",
     expectedCommand:
@@ -54,10 +49,7 @@ export const missions: MissionData[] = [
     sqlConcept: "INSERT",
     icon: "pickaxe",
 
-    scene: ChestScene(
-      [],
-      /^insert\s+into\s+inventário/i
-    ),
+    scene: CraftingTableScene,
 
     validationHints: [
       {
@@ -84,10 +76,7 @@ export const missions: MissionData[] = [
     sqlConcept: "SELECT",
     icon: "database",
 
-    scene: ChestScene(
-      [{ name: "Pedregulho", type: "minério", quantity: 20 }],
-      /^select\s+.+\s+from\s+mina/i
-    ),
+    scene: StoneScene,
 
     validationHints: [
       {
