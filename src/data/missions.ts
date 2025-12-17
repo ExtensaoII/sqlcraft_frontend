@@ -1,5 +1,7 @@
 import { ChestScene } from "@/components/scenes/ChestScene";
-import type { MissionData } from "@/components/scenes/types";
+import { FurnaceScene } from "@/components/scenes/FurnaceScene"
+
+import type { MissionData } from "./types";
 
 export const missions: MissionData[] = [
   {
@@ -47,7 +49,7 @@ export const missions: MissionData[] = [
     icon: "pickaxe",
 
     scene: ChestScene(
-      [{ name: "Madeira de carvalho", type: "madeira", quantity: 10 },],
+      [],
       /^insert\s+into\s+inventário/i
     ),
 
@@ -107,10 +109,7 @@ export const missions: MissionData[] = [
     sqlConcept: "INSERT",
     icon: "pickaxe",
 
-    scene: ChestScene(
-      [{ name: "Minério de Ferro", type: "minério", quantity: 6 }],
-      /^insert\s+into\s+fornalha/i
-    ),
+    scene: FurnaceScene,
 
     validationHints: [
       {
@@ -157,5 +156,143 @@ export const missions: MissionData[] = [
         message: "Você precisa buscar barras de ferro."
       }
     ]
-  }
+  },
+  {
+  id: 6,
+  title: "Minerar Diamantes",
+  briefDescription: "Buscar recursos raros",
+  description: "Use SELECT para localizar diamantes.",
+  expectedCommand:
+    "SELECT * FROM caverna WHERE recurso = 'diamante'",
+  sqlConcept: "SELECT",
+  icon: "database",
+
+  scene: ChestScene(
+    [],
+    /^select\s+.+\s+from\s+caverna/i
+  ),
+
+  validationHints: [
+    {
+      test: (cmd) => !cmd.includes("where"),
+      message: "Use WHERE para filtrar recursos raros."
+    },
+    {
+      test: (cmd) => !cmd.includes("recurso"),
+      message: "Use a coluna recurso para filtrar."
+    },
+    {
+      test: (cmd) => !cmd.includes("diamante"),
+      message: "Você precisa localizar diamantes."
+    }
+  ]
+},
+{
+  id: 7,
+  title: "Coletar Obsidiana",
+  briefDescription: "Adicionar blocos ao inventário",
+  description: "Use INSERT para adicionar obsidiana.",
+  expectedCommand:
+    "INSERT INTO inventário (nome, tipo, quantidade) VALUES ('Obsidiana', 'bloco', 10)",
+  sqlConcept: "INSERT",
+  icon: "pickaxe",
+
+  scene: ChestScene(
+    [],
+    /^insert\s+into\s+inventário/i
+  ),
+
+  validationHints: [
+    {
+      test: (cmd) => !cmd.startsWith("insert"),
+      message: "Use INSERT para adicionar novos blocos."
+    },
+    {
+      test: (cmd) => !cmd.includes("obsidiana"),
+      message: "Você precisa inserir obsidiana."
+    }
+  ]
+},
+{
+  id: 8,
+  title: "Explorar o Nether",
+  briefDescription: "Buscar Blazes",
+  description: "Use SELECT para localizar inimigos.",
+  expectedCommand:
+    "SELECT * FROM fortaleza WHERE inimigo = 'blaze'",
+  sqlConcept: "SELECT",
+  icon: "database",
+
+  scene: ChestScene(
+    [{ name: "Vara de Blaze", type: "drop_inimigo", quantity: 5 }],
+    /^select\s+.+\s+from\s+fortaleza/i
+  ),
+
+  validationHints: [
+    {
+      test: (cmd) => !cmd.includes("where"),
+      message: "Use WHERE para filtrar inimigos."
+    },
+    {
+      test: (cmd) => !cmd.includes("blaze"),
+      message: "Você precisa procurar blazes."
+    }
+  ]
+},
+{
+  id: 9,
+  title: "Coletar Ender Pearls",
+  briefDescription: "Buscar Endermen",
+  description: "Use SELECT para encontrar endermen.",
+  expectedCommand:
+    "SELECT * FROM inimigos WHERE tipo = 'enderman'",
+  sqlConcept: "SELECT",
+  icon: "database",
+
+  scene: ChestScene(
+    [{ name: "Ender Pearl", type: "pearl", quantity: 4 }],
+    /^select\s+.+\s+from\s+inimigos/i
+  ),
+
+  validationHints: [
+    {
+      test: (cmd) => !cmd.includes("where"),
+      message: "Use WHERE para filtrar o inimigo."
+    },
+    {
+      test: (cmd) => !cmd.includes("enderman"),
+      message: "Você precisa buscar endermen."
+    }
+  ]
+},
+{
+  id: 10,
+  title: "Derrotar o Ender Dragon",
+  briefDescription: "Remover o chefe final",
+  description: "Use DELETE para eliminar o dragão.",
+  expectedCommand:
+    "DELETE FROM criaturas WHERE nome = 'Ender Dragon'",
+  sqlConcept: "DELETE",
+  icon: "sword",
+
+  scene: ChestScene(
+    [{ name: "Ovo do Dragão", type: "item_raro", quantity: 1 }],
+    /^delete\s+.+\s+from\s+criaturas/i
+  ),
+
+  validationHints: [
+    {
+      test: (cmd) => !cmd.startsWith("delete"),
+      message: "Use DELETE para remover registros."
+    },
+    {
+      test: (cmd) => !cmd.includes("where"),
+      message: "Use WHERE para indicar qual criatura remover."
+    },
+    {
+      test: (cmd) => !cmd.includes("ender dragon"),
+      message: "Você precisa eliminar o Ender Dragon."
+    }
+  ]
+}
 ];
