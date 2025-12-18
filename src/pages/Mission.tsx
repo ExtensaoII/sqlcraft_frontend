@@ -1,3 +1,6 @@
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -79,16 +82,19 @@ const Mission = () => {
         </Button>
       </div>
 
-      <div className="container mx-auto px-4 py-8 flex-1 flex flex-col">
+      <div className="text-center container mx-auto px-4 py-8 flex-1 flex flex-col">
 
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="font-pixel text-2xl md:text-3xl mb-4">
+        <div className=" mb-8">
+          <h1 className="text-center font-pixel text-2xl md:text-3xl mb-4">
             Fase {mission.id}: {mission.title}
           </h1>
-          <p className="text-lg text-muted-foreground">
-            {mission.description}
-          </p>
+          <div className="text-lg text-muted-foreground mission-description">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {mission.description}
+            </ReactMarkdown>
+          </div>
+
         </div>
 
         {/* Grid */}
@@ -136,7 +142,7 @@ const Mission = () => {
           <div className="flex items-stretch justify-center">
             <div className="flex flex-col h-full w-full text-center">
               <h2 className="font-pixel text-sm mb-4">
-                Cena
+                {mission.containerTitle ?? "Baú de Recursos"}
               </h2>
 
               <div className="flex-1 flex items-center justify-center">

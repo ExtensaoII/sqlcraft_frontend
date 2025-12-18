@@ -2,7 +2,7 @@
 import type { Scene } from "./types";
 import { Obsidian } from "@/components/ore/Obsidian";
 
-const VALID_PATTERN = /^insert\s+into\s+inventário/i;
+const VALID_PATTERN = /^insert\s+into\s+inventário\s*\(\s*nome\s*,\s*tipo\s*,\s*quantidade\s*\)\s*values\s*\(\s*['"]obsidiana['"]\s*/i;
 
 export const ObsidianScene: Scene = {
   id: "obsidian",

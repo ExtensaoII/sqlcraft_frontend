@@ -2,7 +2,7 @@
 import type { Scene } from "./types";
 import { DiamondOre } from "@/components/ore/DiamondOre";
 
-const VALID_PATTERN = /^select\s+.+\s+from\s+caverna/i;
+const VALID_PATTERN = /^select\s+\*\s+from\s+caverna\s+where\s+recurso\s*=\s*['"]diamante['"]/i;
 
 export const DiamondOreScene: Scene = {
   id: "diamond-ore",
