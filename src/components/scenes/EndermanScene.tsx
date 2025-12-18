@@ -2,7 +2,7 @@
 import type { Scene } from "./types";
 import { Enderman } from "@/components/mobs/Enderman";
 
-const VALID_PATTERN =  /^delete\s+from\s+inimigos\s+where\s+nome\s*=\s*['"]enderman['"]/i;
+const VALID_PATTERN =  /^\s*delete\s+from\s+inimigos\s+where\s+nome\s*=\s*['"]enderman['"]/i;
  
 export const EndermanScene: Scene = {
   id: "enderman",

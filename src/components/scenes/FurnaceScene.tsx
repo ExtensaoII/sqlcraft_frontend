@@ -10,6 +10,6 @@ export const FurnaceScene: Scene = {
   },
 
   validate: (command) => {
-    return /^insert\s+into\s+fornalha/i.test(command);
+    return /^\s*insert\s+into\s+fornalha/i.test(command);
   },
 };

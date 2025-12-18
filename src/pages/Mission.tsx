@@ -13,7 +13,11 @@ import { playClickSound } from "@/lib/sound";
 
 
 const normalize = (str: string) =>
-  str.trim().replace(/\s+/g, " ").toLowerCase();
+  str
+    .trim()                      
+    .replace(/\s+/g, " ")        
+    .replace(/["']/g, "'")       
+    .toLowerCase(); 
 
 const Mission = () => {
   const navigate = useNavigate();
