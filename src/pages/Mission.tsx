@@ -7,9 +7,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Chest } from "@/components/chest/Chest";
-import { MinecraftInventoryTable } from "@/components/inventory/InventoryTable";
-
 import { missions } from "@/data/missions";
 
 const normalize = (str: string) =>
@@ -43,8 +40,6 @@ const Mission = () => {
       </div>
     );
   }
-
-  const chestPattern = mission.chestPattern ?? /.*/;
 
   const handleRunCommand = () => {
     const cmd = normalize(sqlCommand);
@@ -87,11 +82,11 @@ const Mission = () => {
         </Button>
       </div>
 
-      <div className="container mx-auto px-4 py-8 flex-1 flex flex-col">
+      <div className="text-center container mx-auto px-4 py-8 flex-1 flex flex-col">
 
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="font-pixel text-2xl md:text-3xl mb-4">
+        <div className=" mb-8">
+          <h1 className="text-center font-pixel text-2xl md:text-3xl mb-4">
             Fase {mission.id}: {mission.title}
           </h1>
           <div className="text-lg text-muted-foreground mission-description">
@@ -143,7 +138,7 @@ const Mission = () => {
             </div>
           </div>
 
-          {/* Chest */}
+          {/* Scene */}
           <div className="flex items-stretch justify-center">
             <div className="flex flex-col h-full w-full text-center">
               <h2 className="font-pixel text-sm mb-4">
@@ -151,12 +146,7 @@ const Mission = () => {
               </h2>
 
               <div className="flex-1 flex items-center justify-center">
-                <Chest
-                  key={mission.id}
-                  command={sqlCommand}
-                  openPattern={chestPattern}
-                  items={<MinecraftInventoryTable items={mission.chestItems} />}
-                />
+                {mission.scene.render({ command: sqlCommand })}
               </div>
             </div>
           </div>
@@ -169,7 +159,7 @@ const Mission = () => {
         {prevId && (
           <Button
             variant="ghost"
-            className="font-pixel text-xs"
+            className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
             onClick={() => navigate(`/mission/${prevId}`)}
           >
             <ArrowLeft className="mr-2" size={20} />
@@ -182,7 +172,7 @@ const Mission = () => {
         {nextId && (
           <Button
             variant="ghost"
-            className="font-pixel text-xs"
+            className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
             onClick={() => navigate(`/mission/${nextId}`)}
           >
             Próxima fase
