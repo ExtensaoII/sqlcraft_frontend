@@ -9,6 +9,9 @@ import { MinecraftInventoryTable } from "@/components/inventory/InventoryTable";
 
 import { missions } from "@/data/missions";
 
+import { playClickSound } from "@/lib/sound";
+
+
 const normalize = (str: string) =>
   str.trim().replace(/\s+/g, " ").toLowerCase();
 
@@ -77,7 +80,7 @@ const Mission = () => {
         <Button
           variant="ghost"
           className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
-          onClick={() => navigate("/missions")}
+          onClick={() => {playClickSound(); navigate("/missions");}}
         >
           <ArrowLeft className="mr-2" size={20} />
           Voltar às Missões
@@ -114,7 +117,7 @@ const Mission = () => {
               />
 
               <Button
-                onClick={handleRunCommand}
+                onClick={() => {playClickSound(); handleRunCommand();}}
                 className="w-full mt-4 font-pixel text-xs"
               >
                 Executar Comando
@@ -164,7 +167,7 @@ const Mission = () => {
           <Button
             variant="ghost"
             className="font-pixel text-xs"
-            onClick={() => navigate(`/mission/${prevId}`)}
+            onClick={() => {playClickSound(); navigate(`/mission/${prevId}`)}}
           >
             <ArrowLeft className="mr-2" size={20} />
             Fase anterior
@@ -177,7 +180,7 @@ const Mission = () => {
           <Button
             variant="ghost"
             className="font-pixel text-xs"
-            onClick={() => navigate(`/mission/${nextId}`)}
+            onClick={() => {playClickSound(); navigate(`/mission/${prevId}`)}}
           >
             Próxima fase
             <ArrowRight className="ml-2" size={20} />

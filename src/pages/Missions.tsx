@@ -3,10 +3,15 @@ import { MissionCard } from "@/components/MissionCard";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { missions } from "@/data/missions";
+import { playClickSound } from "@/lib/sound";
 
 const Missions = () => {
   const navigate = useNavigate();
-  
+
+  const goTo = (path: string) => {
+    playClickSound();
+    navigate(path);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-primary/5 to-background relative">
@@ -16,7 +21,7 @@ const Missions = () => {
         <Button
           variant="ghost"
           className="font-pixel text-xs hover:translate-x-[-4px] transition-transform btn-ghost-blue"
-          onClick={() => navigate('/')}
+          onClick={() => goTo('/')}
         >
           <ArrowLeft className="mr-2" size={20} />
           Voltar ao Menu
@@ -46,7 +51,7 @@ const Missions = () => {
               )}
               <MissionCard 
                 {...mission} 
-                onClick={() => navigate(`/mission/${mission.id}`)} />
+                onClick={() => goTo(`/mission/${mission.id}`)} />
             </div>
           ))}
         </div>
