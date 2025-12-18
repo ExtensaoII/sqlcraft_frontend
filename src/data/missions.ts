@@ -138,15 +138,15 @@ SELECT * FROM mina WHERE recurso = 'valor'
     containerTitle: "Fornalha",
     briefDescription: "INSERT com menos instruções",
     description: `
-Enviar minério para a fornalha significa **registrar uma entrada**.
+Enviar minério para a fornalha significa registrar seu **nome** na tabela.
 
 A tabela usada agora é **fornalha**.
 Você já conhece o formato do INSERT.
 
-Insira corretamente o minério necessário.
+Insira o minério **ferro** na tabela **fornalha**.
 `.trim(),
     expectedCommand:
-      "INSERT INTO fornalha (entrada) VALUES ('ferro')",
+      "INSERT INTO fornalha (nome) VALUES ('ferro')",
     sqlConcept: "INSERT",
     icon: "pickaxe",
     scene: FurnaceScene,
@@ -177,8 +177,7 @@ Insira corretamente o minério necessário.
     description: `
 Agora você já domina INSERT e SELECT.
 
-Crie um equipamento usando o material correto
-e registre-o no local adequado.
+Crie o equipamento **Espada de Ferro** na tabela **bancada**
 `.trim(),
     expectedCommand:
       "INSERT INTO bancada (nome, tipo, quantidade) VALUES ('Espada de Ferro', 'equipamento', 1)",
@@ -212,7 +211,7 @@ e registre-o no local adequado.
     description: `
 Alguns recursos são raros e exigem uma busca mais precisa.
 
-Use uma consulta **SELECT com filtro** para localizar apenas os recursos mais valiosos da caverna.
+Use uma consulta **SELECT com filtro** para localizar apenas os recursos mais valiosos da **caverna**.
 
 Lembre-se de usar uma condição para refinar o resultado:
 \`\`\`sql
@@ -251,10 +250,10 @@ Procure cuidadosamente pelo recurso desejado.
     containerTitle: "Inventário",
     briefDescription: "Execução direta",
     description: `
-Adicione o bloco necessário ao inventário. (Use INSERT para adicionar obsidiana.)
+Adicione **10 blocos** de **Obsidiana** ao **inventário**. (Use INSERT para adicionar o nome **Obsidiana** e a quantidade **10**.)
 `.trim(),
     expectedCommand:
-      "INSERT INTO inventário (nome, tipo, quantidade) VALUES ('Obsidiana', 'bloco', 10)",
+      "INSERT INTO inventário (nome, quantidade) VALUES ('Obsidiana', 10)",
     sqlConcept: "INSERT",
     icon: "pickaxe",
     scene: ObsidianScene,
@@ -278,10 +277,10 @@ Adicione o bloco necessário ao inventário. (Use INSERT para adicionar obsidian
     containerTitle: "Fortaleza",
     briefDescription: "Busca por inimigos",
     description: `
-Encontre a criatura correta. (Blaze)
+Encontre **Blaze** na tabela **fortaleza** com SELECT. Filtre usando o **nome do monstro** pela coluna **inimigo**.
 `.trim(),
     expectedCommand:
-      "SELECT * FROM fortaleza WHERE inimigo = 'blaze'",
+      "SELECT * FROM fortaleza WHERE inimigo = 'Blaze'",
     sqlConcept: "SELECT",
     icon: "database",
     scene: BlazeScene,
@@ -305,10 +304,10 @@ Encontre a criatura correta. (Blaze)
     containerTitle: "Mundo",
     briefDescription: "Primeiro DELETE",
     description: `
-Alguns problemas não são resolvidos com SELECT. (use delete para derrotar o enderman)
+Alguns problemas não são resolvidos com SELECT. Use **DELETE** para derrotar o **Enderman**. Estrutura: DELETE FROM inimigos WHERE nome = 'nome do inimigo'
 `.trim(),
     expectedCommand:
-      "DELETE FROM inimigos WHERE nome = 'enderman'",
+      "DELETE FROM inimigos WHERE nome = 'Enderman'",
     sqlConcept: "DELETE",
     icon: "database",
     scene: EndermanScene,
@@ -332,7 +331,7 @@ Alguns problemas não são resolvidos com SELECT. (use delete para derrotar o en
     containerTitle: "The End",
     briefDescription: "Chefe final",
     description: `
-O último obstáculo.
+O último obstáculo. Derrote o **Ender Dragon**
 `.trim(),
     expectedCommand:
       "DELETE FROM inimigos WHERE nome = 'Ender Dragon'",
