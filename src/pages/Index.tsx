@@ -29,7 +29,7 @@ const Index = () => {
           <Button 
             size="lg" 
             className="w-full font-pixel  px-8 py-8 pixel-corners block-shadow hover:translate-y-[-2px] bg-primary hover:bg-primary/90 transition-transform text-primary-foreground"
-            onClick={() => goTo('/missions')}
+            onClick={() => goTo('/mission/1')}
           >
             <Gamepad2 className="mr-3" size={24} />
             Iniciar Jogo
