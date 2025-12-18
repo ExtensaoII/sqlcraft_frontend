@@ -15,18 +15,18 @@ export const missions: MissionData[] = [
     id: 1,
     title: "Coletar Madeira",
     containerTitle: "Floresta",
-    briefDescription: "Aprenda a usar SELECT para buscar recursos básicos",
+    briefDescription: "Aprenda o formato básico do SELECT",
     description: `
-O baú contém vários tipos de itens misturados, mas você precisa apenas da **madeira**.
+Você está olhando para a tabela **floresta**, que contém vários recursos misturados.
 
-Use uma consulta **SELECT** para examinar o conteúdo do baú e filtrar os itens pelo tipo.
+Seu objetivo é buscar **apenas os registros onde o recurso é madeira**.
 
-**Formato básico de uma consulta:**
+Formato completo de um SELECT com filtro:
 \`\`\`sql
-SELECT colunas FROM tabela WHERE condição
+SELECT * FROM floresta WHERE recurso = 'valor'
 \`\`\`
 
-Experimente selecionar todos os itens do baú que sejam do tipo desejado.
+Substitua o valor corretamente para encontrar a madeira.
 `.trim(),
     expectedCommand: "SELECT * FROM floresta WHERE recurso = 'madeira'",
     sqlConcept: "SELECT",
@@ -35,15 +35,18 @@ Experimente selecionar todos os itens do baú que sejam do tipo desejado.
     validationHints: [
       {
         test: (cmd) => !cmd.includes("where"),
-        message: "Use o WHERE para filtrar os dados."
+        message:
+          "Use o formato completo: SELECT * FROM floresta WHERE condição. Sem WHERE, nada é filtrado."
       },
       {
-        test: (cmd) => !cmd.includes("tipo"),
-        message: "Filtre usando a coluna correta: tipo."
+        test: (cmd) => !cmd.includes("recurso"),
+        message:
+          "A coluna correta para filtrar nesta tabela é recurso."
       },
       {
         test: (cmd) => !cmd.includes("madeira"),
-        message: "Você precisa filtrar para obter madeira."
+        message:
+          "O valor do filtro deve ser exatamente 'madeira'."
       }
     ]
   },
@@ -52,18 +55,19 @@ Experimente selecionar todos os itens do baú que sejam do tipo desejado.
     id: 2,
     title: "Construa Ferramentas",
     containerTitle: "Bancada",
-    briefDescription: "Aprenda a usar INSERT para adicionar novos itens",
+    briefDescription: "Aprenda o formato completo do INSERT",
     description: `
-Para criar uma ferramenta, é preciso **adicionar um novo item ao inventário**.
+Criar um item significa **inserir um novo registro** na tabela correta.
 
-Isso é feito usando o comando **INSERT**, que permite incluir novos registros em uma tabela.
+Você irá adicionar uma ferramenta na tabela **bancada**.
 
-O formato básico de um INSERT é:
+Formato completo do INSERT:
 \`\`\`sql
-INSERT INTO tabela (colunas) VALUES (valores)
+INSERT INTO bancada (nome, tipo, quantidade)
+VALUES ('valor', 'valor', número)
 \`\`\`
 
-Crie uma ferramenta informando seu nome, tipo e quantidade.
+Preencha os valores corretamente para criar a ferramenta.
 `.trim(),
     expectedCommand:
       "INSERT INTO bancada (nome, tipo, quantidade) VALUES ('Picareta de Madeira', 'ferramenta', 1)",
@@ -73,35 +77,37 @@ Crie uma ferramenta informando seu nome, tipo e quantidade.
     validationHints: [
       {
         test: (cmd) => !cmd.startsWith("insert"),
-        message: "Use o comando INSERT para adicionar novos itens."
+        message:
+          "Criação de itens começa com INSERT INTO nome_da_tabela."
       },
       {
-        test: (cmd) => !cmd.includes("into inventário"),
-        message: "Você deve inserir os dados na tabela inventário."
+        test: (cmd) => !cmd.includes("bancada"),
+        message:
+          "A tabela correta para criar ferramentas é bancada."
       },
       {
         test: (cmd) => !cmd.includes("values"),
-        message: "Use VALUES para definir os dados do novo item."
+        message:
+          "Depois das colunas, use VALUES para informar os dados do item."
       }
     ]
   },
 
   {
     id: 3,
-    title: "Localizar pedra",
+    title: "Localizar Pedra",
     containerTitle: "Mina",
-    briefDescription: "Selecione pedra na mina",
+    briefDescription: "Reforço de SELECT com WHERE",
     description: `
-A mina possui diversos tipos de recursos, mas nem todos são úteis agora.
+A tabela **mina** possui vários recursos.
 
-Use uma consulta **SELECT com filtro** para localizar apenas o recurso necessário.
+Você já conhece o formato do SELECT.
+Agora, aplique o filtro correto para buscar apenas pedra.
 
-Filtros são feitos usando condições como:
+Estrutura esperada:
 \`\`\`sql
-WHERE coluna = 'valor'
+SELECT * FROM mina WHERE recurso = 'valor'
 \`\`\`
-
-Consulte a mina e traga apenas o recurso correto.
 `.trim(),
     expectedCommand: "SELECT * FROM mina WHERE recurso = 'pedra'",
     sqlConcept: "SELECT",
@@ -110,15 +116,18 @@ Consulte a mina e traga apenas o recurso correto.
     validationHints: [
       {
         test: (cmd) => !cmd.includes("where"),
-        message: "Use WHERE para filtrar o recurso desejado."
+        message:
+          "Faltou aplicar o filtro WHERE na consulta."
       },
       {
         test: (cmd) => !cmd.includes("recurso"),
-        message: "Use a coluna correta para filtrar: recurso."
+        message:
+          "Use a coluna recurso para diferenciar os materiais."
       },
       {
         test: (cmd) => !cmd.includes("pedra"),
-        message: "Você precisa buscar pedra."
+        message:
+          "O valor do filtro precisa ser pedra."
       }
     ]
   },
@@ -127,36 +136,35 @@ Consulte a mina e traga apenas o recurso correto.
     id: 4,
     title: "Fundir Ferro",
     containerTitle: "Fornalha",
-    briefDescription: "Inserir minério na fornalha",
+    briefDescription: "INSERT com menos instruções",
     description: `
-Para fundir minério, é necessário **enviar o item para a fornalha**.
+Enviar minério para a fornalha significa registrar seu **nome** na tabela.
 
-Isso pode ser simulado adicionando um novo registro na tabela da fornalha usando **INSERT**.
+A tabela usada agora é **fornalha**.
+Você já conhece o formato do INSERT.
 
-Lembre-se do formato:
-\`\`\`sql
-INSERT INTO tabela (colunas) VALUES (valores)
-\`\`\`
-
-Insira o minério correto para iniciar a fundição.
+Insira o minério **ferro** na tabela **fornalha**.
 `.trim(),
     expectedCommand:
-      "INSERT INTO fornalha (entrada) VALUES ('ferro')",
+      "INSERT INTO fornalha (nome) VALUES ('ferro')",
     sqlConcept: "INSERT",
     icon: "pickaxe",
     scene: FurnaceScene,
     validationHints: [
       {
         test: (cmd) => !cmd.startsWith("insert"),
-        message: "A fundição é feita com o comando INSERT."
+        message:
+          "Fundir algo exige adicionar um novo registro."
       },
       {
         test: (cmd) => !cmd.includes("fornalha"),
-        message: "Insira o minério na tabela fornalha."
+        message:
+          "O destino do minério é a tabela fornalha."
       },
       {
         test: (cmd) => !cmd.includes("ferro"),
-        message: "Você precisa inserir ferro."
+        message:
+          "O minério correto ainda não foi informado."
       }
     ]
   },
@@ -165,35 +173,32 @@ Insira o minério correto para iniciar a fundição.
     id: 5,
     title: "Criar Equipamentos de Ferro",
     containerTitle: "Inventário",
-    briefDescription: "Buscar ferro fundido",
+    briefDescription: "Menos formato, mais decisão",
     description: `
-Antes de criar equipamentos, você precisa **verificar quais itens já estão no inventário**.
+Agora você já domina INSERT e SELECT.
 
-Use uma consulta **SELECT** para examinar o inventário e **filtrar apenas as barras de ferro**.
-
-Você pode combinar SELECT e WHERE assim:
-\`\`\`sql
-SELECT colunas FROM tabela WHERE condição
-\`\`\`
-
-Consulte o inventário e encontre o material necessário.
+Crie o equipamento **Espada de Ferro** na tabela **bancada**
 `.trim(),
-    expectedCommand: "INSERT INTO bancada (nome, tipo, quantidade) VALUES ('Espada de Ferro', 'equipamento', 1)",
-    sqlConcept: "SELECT",
+    expectedCommand:
+      "INSERT INTO bancada (nome, tipo, quantidade) VALUES ('Espada de Ferro', 'equipamento', 1)",
+    sqlConcept: "INSERT",
     icon: "database",
     scene: CraftingTableScene,
     validationHints: [
       {
         test: (cmd) => !cmd.startsWith("insert"),
-        message: "Use o comando INSERT para criar um novo o equipamento."
+        message:
+          "Criar equipamentos ainda significa inserir registros."
       },
       {
-        test: (cmd) => !cmd.includes("into bancada"),
-        message: "Você deve inserir o equipamento na bancada"
+        test: (cmd) => !cmd.includes("bancada"),
+        message:
+          "Equipamentos não são criados em qualquer lugar."
       },
       {
         test: (cmd) => !cmd.includes("values"),
-        message: "Use VALUES para definir os dados do equipamento"
+        message:
+          "Um item sem dados não pode existir."
       }
     ]
   },
@@ -202,11 +207,11 @@ Consulte o inventário e encontre o material necessário.
     id: 6,
     title: "Minerar Diamantes",
     containerTitle: "Caverna",
-    briefDescription: "Buscar recursos raros",
+    briefDescription: "Busca precisa",
     description: `
 Alguns recursos são raros e exigem uma busca mais precisa.
 
-Use uma consulta **SELECT com filtro** para localizar apenas os recursos mais valiosos da caverna.
+Use uma consulta **SELECT com filtro** para localizar apenas os recursos mais valiosos da **caverna**.
 
 Lembre-se de usar uma condição para refinar o resultado:
 \`\`\`sql
@@ -223,15 +228,18 @@ Procure cuidadosamente pelo recurso desejado.
     validationHints: [
       {
         test: (cmd) => !cmd.includes("where"),
-        message: "Use WHERE para filtrar recursos raros."
+        message:
+          "Recursos raros exigem filtros."
       },
       {
         test: (cmd) => !cmd.includes("recurso"),
-        message: "Use a coluna recurso para filtrar."
+        message:
+          "Você sabe qual coluna diferencia os minérios."
       },
       {
         test: (cmd) => !cmd.includes("diamante"),
-        message: "Você precisa localizar diamantes."
+        message:
+          "Esse não é o recurso certo."
       }
     ]
   },
@@ -240,21 +248,25 @@ Procure cuidadosamente pelo recurso desejado.
     id: 7,
     title: "Coletar Obsidiana",
     containerTitle: "Inventário",
-    briefDescription: "Adicionar blocos ao inventário",
-    description: "Use INSERT para adicionar obsidiana.",
+    briefDescription: "Execução direta",
+    description: `
+Adicione **10 blocos** de **Obsidiana** ao **inventário**. (Use INSERT para adicionar o nome **Obsidiana** e a quantidade **10**.)
+`.trim(),
     expectedCommand:
-      "INSERT INTO inventário (nome, tipo, quantidade) VALUES ('Obsidiana', 'bloco', 10)",
+      "INSERT INTO inventário (nome, quantidade) VALUES ('Obsidiana', 10)",
     sqlConcept: "INSERT",
     icon: "pickaxe",
     scene: ObsidianScene,
     validationHints: [
       {
         test: (cmd) => !cmd.startsWith("insert"),
-        message: "Use INSERT para adicionar novos blocos."
+        message:
+          "Isso não adiciona nada."
       },
       {
         test: (cmd) => !cmd.includes("obsidiana"),
-        message: "Você precisa inserir obsidiana."
+        message:
+          "O bloco esperado não foi inserido."
       }
     ]
   },
@@ -263,21 +275,25 @@ Procure cuidadosamente pelo recurso desejado.
     id: 8,
     title: "Explorar o Nether",
     containerTitle: "Fortaleza",
-    briefDescription: "Buscar Blazes",
-    description: "Use SELECT para localizar inimigos.",
+    briefDescription: "Busca por inimigos",
+    description: `
+Encontre **Blaze** na tabela **fortaleza** com SELECT. Filtre usando o **nome do monstro** pela coluna **inimigo**.
+`.trim(),
     expectedCommand:
-      "SELECT * FROM fortaleza WHERE inimigo = 'blaze'",
+      "SELECT * FROM fortaleza WHERE inimigo = 'Blaze'",
     sqlConcept: "SELECT",
     icon: "database",
     scene: BlazeScene,
     validationHints: [
       {
         test: (cmd) => !cmd.includes("where"),
-        message: "Use WHERE para filtrar inimigos."
+        message:
+          "Procurar sem filtro não funciona aqui."
       },
       {
         test: (cmd) => !cmd.includes("blaze"),
-        message: "Você precisa procurar blazes."
+        message:
+          "Esse não é o inimigo certo."
       }
     ]
   },
@@ -286,21 +302,25 @@ Procure cuidadosamente pelo recurso desejado.
     id: 9,
     title: "Coletar Ender Pearls",
     containerTitle: "Mundo",
-    briefDescription: "Buscar Endermen",
-    description: "Use DELETE para derrotar endermen.",
+    briefDescription: "Primeiro DELETE",
+    description: `
+Alguns problemas não são resolvidos com SELECT. Use **DELETE** para derrotar o **Enderman**. Estrutura: DELETE FROM inimigos WHERE nome = 'nome do inimigo'
+`.trim(),
     expectedCommand:
-      "DELETE FROM inimigos WHERE nome = 'enderman'",
-    sqlConcept: "SELECT",
+      "DELETE FROM inimigos WHERE nome = 'Enderman'",
+    sqlConcept: "DELETE",
     icon: "database",
     scene: EndermanScene,
     validationHints: [
       {
         test: (cmd) => !cmd.includes("where"),
-        message: "Use WHERE para filtrar o inimigo."
+        message:
+          "Algo específico precisa ser removido."
       },
       {
         test: (cmd) => !cmd.includes("enderman"),
-        message: "Você precisa buscar endermen."
+        message:
+          "O alvo está errado."
       }
     ]
   },
@@ -309,8 +329,10 @@ Procure cuidadosamente pelo recurso desejado.
     id: 10,
     title: "Derrotar o Ender Dragon",
     containerTitle: "The End",
-    briefDescription: "Remover o chefe final",
-    description: "Use DELETE para eliminar o dragão.",
+    briefDescription: "Chefe final",
+    description: `
+O último obstáculo. Derrote o **Ender Dragon**
+`.trim(),
     expectedCommand:
       "DELETE FROM inimigos WHERE nome = 'Ender Dragon'",
     sqlConcept: "DELETE",
@@ -319,15 +341,18 @@ Procure cuidadosamente pelo recurso desejado.
     validationHints: [
       {
         test: (cmd) => !cmd.startsWith("delete"),
-        message: "Use DELETE para remover registros."
+        message:
+          "Esse comando não resolve o problema."
       },
       {
         test: (cmd) => !cmd.includes("where"),
-        message: "Use WHERE para indicar qual criatura remover."
+        message:
+          "Sem um alvo, nada acontece."
       },
       {
         test: (cmd) => !cmd.includes("ender dragon"),
-        message: "Você precisa eliminar o Ender Dragon."
+        message:
+          "O chefe final ainda está lá."
       }
     ]
   }
